@@ -11,11 +11,13 @@ urlpatterns = [
     path('purchase/new/', views.new_purchase, name='new-purchase'),
     path('purchase_return_summary/', views.purchase_return_summary, name='purchase-return'),
     path('purchase/print/<pk>', views.print_purchase, name='purchase-print'),
+    path('purchase/edit/<int:pk>', views.edit_purchase, name='edit-purchase'),
 
     path('sale/', views.sale, name='sale'),
     path('sale/new/', views.new_sale, name='new-sale'),
     path('sale_return/', views.sale_return_summary, name='sale-return'),
     path('sale/print/<int:pk>', views.print_sale, name='sale-print'),
+    path('sale/edit/<pk>', views.edit_sale, name='edit-sale'),
 
     path('journal_voucher/new', views.journal_voucher, name='journal-voucher'),
     path('bank_receiving_voucher', views.bank_receiving_voucher, name='bank-receiving-voucher'),

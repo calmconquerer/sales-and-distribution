@@ -20,7 +20,7 @@ def home(request):
 @login_required()
 def purchase(request):
     all_purchases = PurchaseHeader.objects.all()
-    return render(request, 'transaction/purchase.html',{'all_purchases':all_purchases})
+    return render(request, 'transaction/purchase.html',{'all_purchases': all_purchases})
 
 
 @login_required()
@@ -87,6 +87,62 @@ def new_purchase(request):
 
 
 @login_required()
+def edit_purchase(request, pk):
+    all_item_code = Add_item.objects.all()
+    purchase_header = PurchaseHeader.objects.filter(id=pk).first()
+    purchase_detail = PurchaseDetail.objects.filter(purchase_id=pk).all()
+    all_accounts = ChartOfAccount.objects.all()
+    item_code = request.POST.get('item_code_purchase', False)
+    if item_code:
+        data = Add_item.objects.filter(product_code=item_code)
+        row = serializers.serialize('json', data)
+        return HttpResponse(json.dumps({'row': row}))
+    if request.method == 'POST':
+        purchase_detail.delete()
+
+        purchase_id = request.POST.get('purchase_id', False)
+        supplier = request.POST.get('supplier', False)
+        follow_up = request.POST.get('follow_up', False)
+        payment_method = request.POST.get('payment_method', False)
+        credit_days = request.POST.get('credit_days', False)
+        footer_desc = request.POST.get('footer_desc', False)
+        cartage_amount = request.POST.get('cartage_amount', False)
+        additional_tax = request.POST.get('additional_tax', False)
+        withholding_tax = request.POST.get('withholding_tax', False)
+        account_id = ChartOfAccount.objects.get(account_title=supplier)
+        print(follow_up)
+        if follow_up:
+            follow_up = follow_up
+        else:
+            follow_up = '2010-06-10'
+        date = datetime.date.today()
+        purchase_header.credit_days = credit_days
+        purchase_header.follow_up = follow_up
+        purchase_header.payment_method = payment_method
+        purchase_header.footer_description = footer_desc
+        purchase_header.cartage_amount = cartage_amount
+        purchase_header.additional_tax = additional_tax
+        purchase_header.withholding_tax = withholding_tax
+        purchase_header.account_id = account_id
+
+        purchase_header.save()
+
+        items = json.loads(request.POST.get('items'))
+        purchase_header.save()
+        header_id = PurchaseHeader.objects.get(purchase_no=purchase_id)
+        for value in items:
+            purchase_detail = PurchaseDetail(item_code=value["item_code"], item_name=value["item_name"],
+                                             item_description=value["item_description"], quantity=value["quantity"],
+                                             unit=value["unit"], cost_price=value["price"], retail_price=0,
+                                             sales_tax=value["sales_tax"], purchase_id=header_id)
+            purchase_detail.save()
+        return JsonResponse({'result': 'success'})
+    return render(request, 'transaction/edit_purchase.html',
+                  {'all_item_code': all_item_code, 'all_accounts': all_accounts, 'purchase_header': purchase_header,
+                   'purchase_detail': purchase_detail, 'pk': pk})
+
+
+@login_required()
 def purchase_return_summary(request):
     all_purchase_return = PurchaseReturnHeader.objects.all()
     return render(request, 'transaction/purchase_return_summary.html', {'all_purchase_return': all_purchase_return})
@@ -94,8 +150,8 @@ def purchase_return_summary(request):
 
 @login_required()
 def sale(request):
-    all_sale = SaleHeader.objects.all()
-    return render(request, 'transaction/sale.html',{"all_sale":all_sale})
+    all_sales = SaleHeader.objects.all()
+    return render(request, 'transaction/sale.html',{"all_sales": all_sales})
 
 
 @login_required()
@@ -166,6 +222,91 @@ def new_sale(request):
             tran2.save()
         return JsonResponse({'result':'success'})
     return render(request, 'transaction/new_sale.html',{"all_accounts":all_accounts,"last_sale_no":last_sale_no, 'all_job_order':all_job_order})
+
+
+@login_required()
+def edit_sale(request, pk):
+    job_no = JobOrderHeader.objects.all()
+    sale_header = SaleHeader.objects.filter(id=pk).first()
+    sale_detail = SaleDetail.objects.filter(sale_id=pk).all()
+    all_accounts = ChartOfAccount.objects.all()
+    item_code = request.POST.get('item_code_sale', False)
+    cursor = connection.cursor()
+    # all_dc = cursor.execute('''Select Distinct id,dc_no From (
+    #                                Select distinct dc_id_id,DC.item_code,DC.Item_name,
+    #                                DC.Quantity As DcQuantity,
+    #                                ifnull(sum(SD.Quantity),0) As SaleQuantity,
+    #                                (DC.Quantity-ifnull(Sum(SD.Quantity),0)) As RemainingQuantity
+    #                                from customer_dcdetailcustomer DC
+    #                                Left Join transaction_saledetail SD on SD.dc_ref = DC.dc_id_id
+    #                                And SD.item_code = DC.item_code
+    #                                group by dc_id_id,dc.item_code,dc.Item_name
+    #                                ) As tblData
+    #                                Inner Join customer_dcheadercustomer  HD on  HD.id = tblData.dc_id_id
+    #                                Where RemainingQuantity > 0''')
+    # all_dc = all_dc.fetchall()
+    # dc_code_sale_edit = request.POST.get('dc_code_sale_edit')
+    # if dc_code_sale_edit:
+    #     header_id = DcHeaderCustomer.objects.get(dc_no=dc_code_sale_edit)
+    #     data = cursor.execute('''Select * From (
+    #                            Select distinct dc_id_id,DC.item_code,DC.Item_name, DC.item_description, DC.unit,
+    #                            DC.Quantity As DcQuantity,
+    #                            ifnull(sum(SD.Quantity),0) As SaleQuantity,
+    #                            (DC.Quantity-ifnull(Sum(SD.Quantity),0)) As RemainingQuantity
+    #                            from customer_dcdetailcustomer DC
+    #                            Left Join transaction_saledetail SD on SD.dc_ref = DC.dc_id_id
+    #                            And SD.item_code = DC.item_code
+    #                            group by dc_id_id,dc.item_code,dc.Item_name
+    #                            ) As tblData
+    #                            Where RemainingQuantity > 0 And dc_id_id = %s
+    #                            ''', [header_id.id])
+    #     row = data.fetchall()
+    #     return JsonResponse({"row": row, 'dc_ref': header_id.id})
+    if request.method == 'POST':
+        sale_detail.delete()
+
+        sale_id = request.POST.get('sale_id', False)
+        customer = request.POST.get('customer', False)
+        credit_days = request.POST.get('credit_days', False)
+        follow_up = request.POST.get('follow_up', False)
+        payment_method = request.POST.get('payment_method', False)
+        footer_desc = request.POST.get('footer_desc', False)
+        cartage_amount = request.POST.get('cartage_amount', False)
+        additional_tax = request.POST.get('additional_tax', False)
+        withholding_tax = request.POST.get('withholding_tax', False)
+        account_id = ChartOfAccount.objects.get(account_title=customer)
+        date = datetime.date.today()
+
+        if follow_up:
+            follow_up = follow_up
+        else:
+            follow_up = '2010-06-10'
+
+        sale_header.follow_up = follow_up
+        sale_header.credit_days = credit_days
+        sale_header.payment_method = payment_method
+        sale_header.footer_description = footer_desc
+        sale_header.cartage_amount = cartage_amount
+        sale_header.additional_tax = additional_tax
+        sale_header.withholding_tax = withholding_tax
+        sale_header.account_id = account_id
+
+        sale_header.save()
+
+        items = json.loads(request.POST.get('items'))
+        sale_header.save()
+        header_id = SaleHeader.objects.get(sale_no=sale_id)
+        for value in items:
+            print(value["dc_no"])
+            sale_detail = SaleDetail(item_code=value["item_code"], item_name=value["item_name"],
+                                     item_description=value["item_description"], quantity=value["quantity"],
+                                     unit=value["unit"], cost_price=value["price"], retail_price=0,
+                                     sales_tax=value["sales_tax"], sale_id=header_id, dc_ref=value["dc_no"])
+            sale_detail.save()
+        return JsonResponse({'result': 'success'})
+    return render(request, 'transaction/edit_sale.html',
+                  {'job_no': job_no, 'sale_header': sale_header, 'sale_detail': sale_detail})
+
 
 
 @login_required()

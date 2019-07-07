@@ -131,6 +131,7 @@ class VoucherDetail(models.Model):
     credit = models.DecimalField(max_digits = 8, decimal_places = 2)
     header_id = models.ForeignKey(VoucherHeader, models.SET_NULL,blank=True,null=True)
 
+
 class JobOrderHeader(models.Model):
     job_no = models.CharField(max_length = 100)
     file_name = models.CharField(max_length = 100)
@@ -138,6 +139,7 @@ class JobOrderHeader(models.Model):
     delivery_date = models.DateField(default = datetime.date.today)
     remarks = models.CharField(max_length = 100)
     account_id = models.ForeignKey(ChartOfAccount, models.SET_NULL,blank=True,null=True)
+
 
 class JobOrderDetail(models.Model):
     item_id = models.ForeignKey(Add_item, models.SET_NULL, blank=True, null=True)
