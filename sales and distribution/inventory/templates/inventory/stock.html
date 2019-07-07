@@ -1,0 +1,50 @@
+{% extends "transaction/base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+<div class="card" style="width: 100%;">
+<div class="card-header">
+  <h4>Item Stock</h4>
+</div>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <!-- <div class="form-row">
+      <input type="text" name=""class="form-control col-md-2" value="">
+    </div> -->
+    <br>
+    <div class="table table-responsive">
+
+    </div>
+    <table class="table table-bordered sort" id="dataTable">
+        <thead>
+            <tr>
+                <th >Item Code</th>
+                <th>Item Name</th>
+                <th width="160px">Item Description</th>
+                <th width="160px">Inventory Stock</th>
+                <th width="160px">Unit</th>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+          {% for value in stock %}
+          {% if value.0 is None %}
+          {% else %}
+          <tr>
+              <td>{{ value.2 }}</td>
+              <td>{{ value.3 }}</td>
+              <td>{{ value.4 }}</td>
+              <td>{{ value.6 }}</td>
+              <td>{{ value.5 }}</td>
+  			      <td><a class="delete_item_row" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+    </table>
+  </li>
+</ul>
+</div>
+
+
+{% endblock body %}
