@@ -16,6 +16,7 @@ class ChartOfAccount(models.Model):
     remarks = models.CharField(max_length = 100)
     credit_limit = models.DecimalField(max_digits = 8, decimal_places = 2)
 
+
 class PurchaseHeader(models.Model):
     purchase_no = models.CharField(max_length = 100, unique = True)
     date = models.DateField(default=datetime.date.today)

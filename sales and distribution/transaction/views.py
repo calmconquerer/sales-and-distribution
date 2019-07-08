@@ -605,7 +605,7 @@ def edit_bank_receiving_voucher(request):
 
 
 def edit_bank_payment_voucher(request):
-    return render(request, 'transaction/edit_bank_receiving_voucher.html')
+    return render(request, 'transaction/edit_bank_payment_voucher.html')
 
 
 def reports(request):
@@ -841,3 +841,16 @@ def new_job_order(request):
             job_order_detail.save()
         return JsonResponse({"result":"success"})
     return render(request, 'transaction/new_job_order.html',{"get_job_no":get_job_no,"all_item_code":all_item_code,"all_accounts":all_accounts})
+
+
+def edit_cash_receiving(request):
+    return render(request, 'transaction/edit_cash_receiving_voucher.html')
+
+
+def edit_cash_payment(request):
+    return render(request, 'transaction/edit_cash_payment_voucher.html')
+
+
+def edit_journal_voucher(request):
+    return render(request, 'transaction/edit_journal_voucher.html')
+
