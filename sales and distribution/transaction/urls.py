@@ -9,13 +9,15 @@ urlpatterns = [
 
     path('purchase/', views.purchase, name='purchase'),
     path('purchase/new/', views.new_purchase, name='new-purchase'),
-    path('purchase_return_summary/', views.purchase_return_summary, name='purchase-return'),
+    path('purchase_return/', views.purchase_return_summary, name='purchase-return'),
+    path('purchase_return/new', views.new_purchase_return, name='new-purchase-return'),
     path('purchase/print/<pk>', views.print_purchase, name='purchase-print'),
     path('purchase/edit/<int:pk>', views.edit_purchase, name='edit-purchase'),
 
     path('sale/', views.sale, name='sale'),
     path('sale/new/', views.new_sale, name='new-sale'),
     path('sale_return/', views.sale_return_summary, name='sale-return'),
+    path('sale_return/new', views.new_sale_return, name='new-sale-return'),
     path('sale/print/<int:pk>', views.print_sale, name='sale-print'),
     path('sale/edit/<pk>', views.edit_sale, name='edit-sale'),
 
@@ -30,7 +32,7 @@ urlpatterns = [
     path('trial_balance/pdf/', views.trial_balance, name = 'trial-balance'),
     path('account_ledger/pdf/', views.account_ledger, name='account-ledger'),
     path('cash_receiving_voucher/new/', views.new_cash_receiving_voucher, name='cash-receiving-voucher'),
-    path('cash_receiving_voucher/edit', views.edit_bank_receiving_voucher, name='edit-receiving'),
+    path('cash_receiving_voucher/edit', views.edit_cash_receiving, name='edit-cash-receiving'),
     path('cash_payment_voucher/new/', views.cash_payment_voucher, name='cash-payment-voucher'),
     path('cash_payment_voucher/edit', views.edit_cash_payment, name='edit-cash-payment'),
 

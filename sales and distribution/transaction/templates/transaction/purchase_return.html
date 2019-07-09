@@ -13,7 +13,7 @@
       <div class="form-row">
         <div class="form-group col-md-2">
           <label>Purchase ID</label>
-          <input list="account"  class="form-control form-control-sm" required id="purchase_id" value="" >
+          <input list="account"  class="form-control form-control-sm" required id="purchase_id" value="" readonly>
           <datalist id="account">
             {% for value in all_accounts %}
             <option value="{{value.account_title}}">{{value.account_title}}</option>

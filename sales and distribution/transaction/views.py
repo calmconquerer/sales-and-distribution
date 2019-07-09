@@ -148,6 +148,10 @@ def purchase_return_summary(request):
     return render(request, 'transaction/purchase_return_summary.html', {'all_purchase_return': all_purchase_return})
 
 
+def new_purchase_return(request):
+    return render(request, 'transaction/purchase_return.html')
+
+
 @login_required()
 def sale(request):
     all_sales = SaleHeader.objects.all()
@@ -308,11 +312,14 @@ def edit_sale(request, pk):
                   {'job_no': job_no, 'sale_header': sale_header, 'sale_detail': sale_detail})
 
 
-
 @login_required()
 def sale_return_summary(request):
     all_sales_return = SaleReturnHeader.objects.all()
     return render(request, 'transaction/sale_return_summary.html', {'all_sales_return': all_sales_return})
+
+
+def new_sale_return(request):
+    return render(request, 'transaction/sale_return.html')
 
 
 @login_required()
@@ -344,11 +351,6 @@ def chart_of_account(request):
         coa.save()
     return render(request, 'transaction/chart_of_account.html',{'all_accounts_null':all_accounts_null,'all_accounts':all_accounts})
 
-
-@login_required()
-def sale_return_summary(request):
-
-    return render(request, 'transaction/sale_return_summary.html')
 
 
 @login_required()
@@ -600,14 +602,6 @@ def bank_payment_voucher(request):
     return render(request, 'transaction/bank_payment_voucher.html')
 
 
-def edit_bank_receiving_voucher(request):
-    return render(request, 'transaction/edit_bank_receiving_voucher.html')
-
-
-def edit_bank_payment_voucher(request):
-    return render(request, 'transaction/edit_bank_payment_voucher.html')
-
-
 def reports(request):
     all_accounts = ChartOfAccount.objects.all()
     return render(request, 'transaction/reports.html', {'all_accounts': all_accounts})
@@ -799,8 +793,10 @@ def cash_payment_voucher(request):
     return render(request, 'transaction/cash_payment_voucher.html',
                   {"all_accounts": all_accounts, 'get_last_tran_id': get_last_tran_id})
 
+
 def job_order(request):
     return render(request, 'transaction/job_order.html')
+
 
 def new_job_order(request):
     serial = "1"
@@ -841,6 +837,14 @@ def new_job_order(request):
             job_order_detail.save()
         return JsonResponse({"result":"success"})
     return render(request, 'transaction/new_job_order.html',{"get_job_no":get_job_no,"all_item_code":all_item_code,"all_accounts":all_accounts})
+
+
+def edit_bank_receiving_voucher(request):
+    return render(request, 'transaction/edit_bank_receiving_voucher.html')
+
+
+def edit_bank_payment_voucher(request):
+    return render(request, 'transaction/edit_bank_payment_voucher.html')
 
 
 def edit_cash_receiving(request):
