@@ -21,7 +21,7 @@
         </div>
         <div class="form-group col-md-2">
           <label>Customer Name</label>
-          <input list="account"  class="form-control form-control-sm" required id="supplier_purchase_return" value="{{purchase_header.account_id.account_title}}" >
+          <input list="account"  class="form-control form-control-sm" required id="" value="" >
           <datalist id="account">
             {% for value in all_accounts %}
             <option value="{{value.account_title}}">{{value.account_title}}</option>
@@ -29,8 +29,8 @@
         </datalist>
         </div>
         <div class="form-group col-md-2">
-            <label for="">Date</label>
-            <input type="date"  class="form-control form-control-sm" required value="" id="doc_date">
+            <label for="">Follow Up</label>
+            <input type="date"  class="form-control form-control-sm" required value="" id="">
         </div>
         <div class="form-group col-md-2">
          <label for="sel1">Payment Term:</label>
@@ -56,7 +56,6 @@
                 <th width="60px">Qty</th>
                 <th width="60px">Unit</th>
                 <th width="70px">Price</th>
-                <th width="90px">Sales Tax in % </th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -70,47 +69,12 @@
             <td>{{ value.quantity }}</td>
             <td>{{ value.unit }}</td>
             <td>{{ value.cost_price }}</td>
-            <td>{{ value.sales_tax }}</td>
             <td><a class="add-sale-return" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit-sale-return" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a><a class="delete-sale-return" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
           </tr>
           {% endfor %}
         </tbody>
     </table>
     </li>
-    <!-- <li class="list-group-item">
-      <input type="hidden" name="" value="" id="hidden">
-      <div class="float-right">
-        <div class="form-inline">
-          <div class="form-group">
-            <label for="text" style="font-size:14px;" >Cartage Amount:</label>
-              <input type="text" class="form-control form-control-sm" id="cartage_amount" style="border-top: 0px; border-right:0px; border-left:0px;" required value="0.00">
-          </div>
-        </div>
-        <div class="form-inline">
-          <div class="form-group">
-            <label for="text" style="font-size:14px;">Additional Tax: &nbsp;&nbsp;&nbsp;</label>
-            <input type="text" class="form-control form-control-sm" style="border-top: 0px; border-right:0px; border-left:0px;" id="additional_tax" required value="0.00">
-          </div>
-        </div>
-        <div class="form-inline">
-          <div class="form-group">
-            <label for="text" style="font-size:14px;">Withholding Tax:&nbsp;</label>
-            <input type="text" class="form-control form-control-sm" style="border-top: 0px; border-right:0px; border-left:0px;" id="withholding_tax" required value="0">
-          </div>
-        </div>
-        <div class="form-inline">
-          <div class="form-group">
-            <label for="text" style="font-size:14px;"><b>Grand Total:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-            <input type="text" readonly class="form-control form-control-sm" id="last_grand_total" style="border-top: 0px; border-right:0px; border-left:0px;">
-          </div>
-        </div>
-      </div>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      </li> -->
       <br>
     <div class="text-center">
       <button type="submit" class="btn btn-outline-primary has_id" id="{{pk}}">Submit <small>(Sales Return)</small></button>

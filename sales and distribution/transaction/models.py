@@ -85,7 +85,6 @@ class SaleReturnHeader(models.Model):
     account_id = models.ForeignKey(ChartOfAccount, models.SET_NULL,blank=True,null=True,)
 
 
-
 class SaleReturnDetail(models.Model):
     item_id = models.ForeignKey(Add_item, models.SET_NULL, blank=True, null=True)
     item_description = models.TextField()
