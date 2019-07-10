@@ -473,7 +473,17 @@ def journal_voucher(request):
 
 
 def bank_receiving_voucher(request):
-    return render(request, 'transaction/bank_receiving_voucher.html')
+    # all_invoices = VoucherHeader.objects.filter(voucher_no=get_tran_id)
+    cursor = connection.cursor()
+    all_voucher = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%BRV%'
+                                        ''')
+    all_voucher = all_voucher.fetchall()
+    print(all_voucher)
+    user = None
+    if request.user.is_authenticated:
+        user = request.user.username
+
+    return render(request, 'transaction/bank_receiving_voucher.html', {'all_voucher': all_voucher, 'user': user})
 
 
 def new_bank_receiving_voucher(request):
@@ -897,11 +907,13 @@ def edit_bank_receiving_voucher(request):
     return render(request, 'transaction/edit_bank_receiving_voucher.html')
 
 
-def edit_bank_payment_voucher(request):
+def edit_bank_payment_voucher(request, pk):
+
     return render(request, 'transaction/edit_bank_payment_voucher.html')
 
 
-def edit_cash_receiving(request):
+def edit_cash_receiving(request, pk):
+
     return render(request, 'transaction/edit_cash_receiving_voucher.html')
 
 
@@ -910,6 +922,7 @@ def edit_cash_payment(request, pk):
     return render(request, 'transaction/edit_cash_payment_voucher.html')
 
 
-def edit_journal_voucher(request):
+def edit_journal_voucher(request, pk):
+
     return render(request, 'transaction/edit_journal_voucher.html')
 
