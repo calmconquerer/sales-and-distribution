@@ -444,9 +444,10 @@ def journal_voucher(request):
         doc_no = request.POST.get('doc_no', False)
         doc_date = request.POST.get('doc_date', False)
         description = request.POST.get('description', False)
+        user = request.user.username
         items = json.loads(request.POST.get('items', False))
         jv_header = VoucherHeader(voucher_no=get_last_tran_id, doc_no=doc_no, doc_date=doc_date, cheque_no="-",
-                                  cheque_date=doc_date, description=description)
+                                  cheque_date=doc_date, description=description, user=user)
         jv_header.save()
         header_id = VoucherHeader.objects.get(voucher_no = get_last_tran_id)
         for value in items:
@@ -473,7 +474,6 @@ def journal_voucher(request):
 
 
 def bank_receiving_voucher(request):
-    # all_invoices = VoucherHeader.objects.filter(voucher_no=get_tran_id)
     cursor = connection.cursor()
     all_voucher = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%BRV%'
                                         ''')
@@ -514,12 +514,13 @@ def new_bank_receiving_voucher(request):
         doc_no = request.POST.get('doc_no', False)
         doc_date = request.POST.get('doc_date', False)
         description = request.POST.get('description', False)
+        user = request.user.username
         cheque_no = request.POST.get('cheque_no', False)
         cheque_date = request.POST.get('cheque_date', False)
 
         items = json.loads(request.POST.get('items', False))
         jv_header = VoucherHeader(voucher_no=get_last_tran_id, doc_no=doc_no, doc_date=doc_date, cheque_no=cheque_no,
-                                  cheque_date=cheque_date, description=description)
+                                  cheque_date=cheque_date, description=description, user=user)
         jv_header.save()
         header_id = VoucherHeader.objects.get(voucher_no = get_last_tran_id)
         for value in items:
@@ -906,6 +907,12 @@ def edit_bank_receiving_voucher(request):
         return JsonResponse({"result": "success"})
     return render(request, 'transaction/edit_bank_receiving_voucher.html')
 
+
+def journal_voucher_summary(request):
+    cursor = connection.cursor()
+    all_voucher = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%JV%' ''')
+    all_voucher = all_voucher.fetchall()
+    return render(request, 'transaction/journal_voucher_summary.html', {'all_voucher': all_voucher})
 
 def edit_bank_payment_voucher(request, pk):
 

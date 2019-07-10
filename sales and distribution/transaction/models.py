@@ -1,5 +1,6 @@
 from django.db import models
 from inventory.models import Add_item
+from django.contrib.auth.models import User
 import datetime
 
 
@@ -33,6 +34,7 @@ class PurchaseReturnHeader(models.Model):
     follow_up = models.DateField(default = datetime.date.today)
     payment_method = models.CharField(max_length = 100)
     account_id = models.ForeignKey(ChartOfAccount, models.SET_NULL, blank=True, null=True,)
+
 
 
 class PurchaseReturnDetail(models.Model):
@@ -123,6 +125,7 @@ class VoucherHeader(models.Model):
     cheque_no = models.CharField(max_length = 100)
     cheque_date = models.DateField(max_length = datetime.date.today)
     description = models.TextField()
+    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
 
 
 class VoucherDetail(models.Model):
