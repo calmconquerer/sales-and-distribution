@@ -876,61 +876,7 @@ def new_job_order(request):
     return render(request, 'transaction/new_job_order.html',{"get_job_no":get_job_no,"all_item_code":all_item_code,"all_accounts":all_accounts})
 
 
-def edit_bank_receiving_voucher(request):
-    serial = "1"
-    cursor = connection.cursor()
-    get_last_tran_id = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%JV%'
-                                           order by voucher_no DESC LIMIT 1''')
-    get_last_tran_id = get_last_tran_id.fetchall()
-
-    date = datetime.date.today()
-    date = date.strftime('%Y%m')
-    if get_last_tran_id:
-        get_last_tran_id = get_last_tran_id[0][1]
-        get_last_tran_id = get_last_tran_id[6:]
-        serial = str((int(get_last_tran_id) + 1))
-        # count = last_sale_no.count('0')
-        get_last_tran_id = date[2:] + 'JV' + serial
-    else:
-        get_last_tran_id = date[2:] + 'JV1'
-    account_id = request.POST.get('account_title', False)
-    all_accounts = ChartOfAccount.objects.all()
-    if account_id:
-        account_info = ChartOfAccount.objects.filter(id=account_id).first()
-        account_title = account_info.account_title
-        account_id = account_info.id
-        return JsonResponse({'account_title': account_title, 'account_id': account_id})
-    if request.method == "POST":
-        doc_no = request.POST.get('doc_no', False)
-        doc_date = request.POST.get('doc_date', False)
-        description = request.POST.get('description', False)
-        items = json.loads(request.POST.get('items', False))
-        jv_header = VoucherHeader(voucher_no=get_last_tran_id, doc_no=doc_no, doc_date=doc_date, cheque_no="-",
-                                  cheque_date=doc_date, description=description)
-        jv_header.save()
-        header_id = VoucherHeader.objects.get(voucher_no=get_last_tran_id)
-        for value in items:
-            account_id = ChartOfAccount.objects.get(account_title=value["account_title"])
-            if value["debit"] > "0" and value["debit"] > "0.00":
-                tran1 = Transactions(refrence_id=doc_no, refrence_date=doc_date, tran_type='JV',
-                                     amount=abs(float(value["debit"])),
-                                     date=datetime.date.today(), remarks=get_last_tran_id, account_id=account_id, )
-                tran1.save()
-                jv_detail1 = VoucherDetail(account_id=account_id, debit=abs(float(value["debit"])), credit=0.00,
-                                           header_id=header_id)
-                jv_detail1.save()
-            print(value["debit"])
-            if value["credit"] > "0" and value["credit"] > "0.00":
-                print("run")
-                print(value["credit"])
-                tran2 = Transactions(refrence_id=doc_no, refrence_date=doc_date, tran_type='JV',
-                                     amount=-abs(float(value["credit"])),
-                                     date=datetime.date.today(), remarks=get_last_tran_id, account_id=account_id, )
-                tran2.save()
-                jv_detail2 = VoucherDetail(account_id=account_id, debit=0.00, credit=-abs(float(value["credit"])),
-                                           header_id=header_id)
-                jv_detail2.save()
-        return JsonResponse({"result": "success"})
+def edit_bank_receiving_voucher(request, pk):
     return render(request, 'transaction/edit_bank_receiving_voucher.html')
 
 
