@@ -1,71 +1,54 @@
-{% extends 'transaction/base.html' %}
+{% extends "transaction/base.html" %}
 {% load crispy_forms_tags %}
 {% block body %}
 
 <div class="card" style="width: 100%;">
-    <div class="card-header">
-      <h4>Cash Receiving Voucher</h4>
-    </div>
-    <ul class="list-group list-group-flush">
-    <form  action="" id="new-jv-form-crv" autocomplete="off"  method="post">
-      {% csrf_token %}
-      <li class="list-group-item">
-          <div class="form-row">
-            <div class="form-group col-md-2">
-              <label for="">Transaction ID</label>
-              <input type="text" readonly class="form-control form-control-sm" required value="{{ get_last_tran_id }}" id="tran_id">
-            </div>
-            <div class="form-group col-md-2">
-              <label for="">Invoice #</label>
-              <input type="text"  class="form-control form-control-sm" required value="" id="doc_no">
-            </div>
-            <div class="form-group col-md-2">
-              <label for="">Document Date</label>
-              <input type="date"  class="form-control form-control-sm" required value="" id="doc_date">
-            </div>
-            <div class="form-group col-md-2">
-              <label for="">Description</label>
-              <textarea name="name" style="width:370px; height:30px;" id="description"></textarea>
-            </div>
-          </div>
-          </li>
-        <li class="list-group-item">
-        <div class="table-title">
-            <div class="row">
-              <div class="col-md-2">
-                <select class="form-control form-control-sm" id="account_title">
-                  {% for value in all_accounts %}
-                  <option value="{{value.id}}">{{value.account_title}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-                <div style="margin-left:20px;">
-                    <button type="button" class="btn btn-info add-item-crv"><i class="fa fa-plus"></i>Insert Account</button>
-                </div>
-            </div>
-        </div>
-        <div class="table table-responsive">
-          <table class="table table-bordered" id="new-crv-table">
-              <thead>
-                  <tr>
-                      <th width="100px" style="font-size:10px;">Account Id</th>
-                      <th width="300px">Account Title</th>
-                      <th width="100px">Debit</th>
-                      <th width="100px">Credit</th>
-                      <th>Action</th>
-                  </tr>
-              </thead>
-              <tbody>
-              </tbody>
-          </table>
-        </div>
-        </li>
-          <br>
-        <div class="text-center">
-          <button type="submit" class="btn btn-outline-primary">Submit <small>(Cash Receiving Voucher)</small></button>
-        </div>
-        <br>
-    </form>
-    </ul>
+<div class="card-header">
+  <h4>Cash Receiving Voucher</h4>
 </div>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+
+    <div class="input-group">
+      <input type="text" class="form-control col-md-4" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <div class="col-md-8">
+        <a role="button" href="{% url 'new-cash-receiving-voucher' %}" style="float:right;" class="btn btn-outline-secondary" name="button"><i class="fas fa-plus"></i> Add New</a>
+      </div>
+    </div>
+    <br>
+    <div class="table table-responsive content-loader">
+      <table class="table table-bordered" id="dataTable">
+          <thead>
+              <tr>
+                  <th>Voucher No.</th>
+                  <th width="300px">Transaction ID.</th>
+                  <th>Invoice No.</th>
+                  <th>Date</th>
+                  <th>From</th>
+                  <th width="600px">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for value in all_voucher%}
+                <tr>
+                    <td>{{ value.0 }}</td>
+                    <td>{{value.1}}</td>
+                    <td>{{value.2}}</td>
+                    <td>{{value.3}}</td>
+                    <td>{{value.7}}</td>
+                    <td><a class="edit_list" href="{% url 'edit-journal-voucher' pk=value.0 %}" data-toggle=""><i class="material-icons">&#xE254;</i></a><a class="return" href=""><i class="fas fa-undo"></i></a><a href="" target="_blank" data-toggle=""><i class="fa fa-print" id="print_icon" aria-hidden="true"></i></a><a class=""  data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
+                </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+  </li>
+</ul>
+</div>
+
 {% endblock body %}

@@ -2032,6 +2032,7 @@ $('#tree1').treed();
 
 
 			$(".add-item-cpv").click(function(){
+		        console.log("hamza")
 				var account_title = $('#account_title').val();
 				req =	$.ajax({
 					 headers: { "X-CSRFToken": getCookie("csrftoken") },
@@ -2048,7 +2049,7 @@ $('#tree1').treed();
 										 '<td>'+ data.account_title +'</td>' +
 										 '<td><input type="text" class="form-control" required value="0.00"></td>' +
 										 '<td><input type="text" class="form-control" required value="0.00"></td>' +
-							 '<td width="100px"><a class="add-crv" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit-crv" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a> <a class="delete-crv" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>' +
+							 '<td width="100px"><a class="add-cpv" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit-cpv" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a> <a class="delete-cpv" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>' +
 								 '</tr>';
 							 $("table").append(row);
 						 $("table tbody tr").eq(index + 1).find(".add-cpv, .edit-cpv").toggle();

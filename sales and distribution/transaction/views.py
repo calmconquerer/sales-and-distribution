@@ -610,7 +610,10 @@ def new_bank_payment_voucher(request):
 
 
 def bank_payment_voucher(request):
-    return render(request, 'transaction/bank_payment_voucher.html')
+    cursor = connection.cursor()
+    all_vouchers = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%BPV%' ''')
+    all_vouchers = all_vouchers.fetchall()
+    return render(request, 'transaction/bank_payment_voucher.html', {'all_vouchers': all_vouchers})
 
 
 def reports(request):
@@ -691,6 +694,13 @@ def account_ledger(request):
     return redirect('reports')
 
 
+def cash_receiving_voucher(request):
+    cursor = connection.cursor()
+    all_vouchers = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%CRV%' ''')
+    all_vouchers = all_vouchers.fetchall()
+    return render(request, 'transaction/cash_receiving_voucher.html', {'all_vouchers': all_vouchers})
+
+
 def new_cash_receiving_voucher(request):
     cursor = connection.cursor()
     get_last_tran_id = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%CRV%'
@@ -749,10 +759,20 @@ def new_cash_receiving_voucher(request):
 
 def cash_payment_voucher(request):
     cursor = connection.cursor()
+    all_vouchers = cursor.execute('''select VH.id, VH.voucher_no, VH.doc_no, VH.doc_date, VH.cheque_no, VH.description, 
+                                        AU.username from transaction_voucherheader VH
+                                        inner join auth_user AU on VH.user_id = AU.id
+                                        where VH.voucher_no LIKE '%CPV%' ''')
+    print(all_vouchers)
+    all_vouchers = all_vouchers.fetchall()
+    return render(request, 'transaction/cash_payment_voucher.html', {'all_vouchers': all_vouchers})
+
+
+def new_cash_payment_voucher(request):
+    cursor = connection.cursor()
     get_last_tran_id = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%CPV%'
                                         order by voucher_no DESC LIMIT 1''')
     get_last_tran_id = get_last_tran_id.fetchall()
-    print(get_last_tran_id)
 
     date = datetime.date.today()
     date = date.strftime('%Y%m')
@@ -771,13 +791,15 @@ def cash_payment_voucher(request):
         account_title = account_info.account_title
         account_id = account_info.id
         return JsonResponse({'account_title': account_title, 'account_id': account_id})
+    user = request.user
+    print(user)
     if request.method == "POST":
         doc_no = request.POST.get('doc_no', False)
         doc_date = request.POST.get('doc_date', False)
         description = request.POST.get('description', False)
         items = json.loads(request.POST.get('items', False))
         jv_header = VoucherHeader(voucher_no=get_last_tran_id, doc_no=doc_no, doc_date=doc_date, cheque_no="-",
-                                  cheque_date=doc_date, description=description)
+                                  cheque_date=doc_date, description=description, user=user)
         jv_header.save()
         header_id = VoucherHeader.objects.get(voucher_no = get_last_tran_id)
         for value in items:
@@ -801,7 +823,7 @@ def cash_payment_voucher(request):
                 jv_detail2 = VoucherDetail(account_id=account_id, debit=0.00, credit=-abs(float(value["credit"])), header_id=header_id)
                 jv_detail2.save()
         return JsonResponse({"result": "success"})
-    return render(request, 'transaction/cash_payment_voucher.html',
+    return render(request, 'transaction/new_cash_payment_voucher.html',
                   {"all_accounts": all_accounts, 'get_last_tran_id': get_last_tran_id})
 
 
@@ -913,6 +935,7 @@ def journal_voucher_summary(request):
     all_voucher = cursor.execute('''select * from transaction_voucherheader where voucher_no LIKE '%JV%' ''')
     all_voucher = all_voucher.fetchall()
     return render(request, 'transaction/journal_voucher_summary.html', {'all_voucher': all_voucher})
+
 
 def edit_bank_payment_voucher(request, pk):
 

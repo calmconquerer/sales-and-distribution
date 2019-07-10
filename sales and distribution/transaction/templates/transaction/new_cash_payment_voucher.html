@@ -1,13 +1,13 @@
-{% extends 'transaction/base.html' %}
+{% extends "transaction/base.html" %}
 {% load crispy_forms_tags %}
 {% block body %}
 
 <div class="card" style="width: 100%;">
     <div class="card-header">
-      <h4>Edit Cash Receiving Voucher</h4>
+      <h4>Cash Payment Voucher</h4>
     </div>
     <ul class="list-group list-group-flush">
-    <form  action="" id="edit-jv-form-crv" autocomplete="off"  method="post">
+    <form  action="" id="new-jv-form-cpv" autocomplete="off"  method="post">
       {% csrf_token %}
       <li class="list-group-item">
           <div class="form-row">
@@ -40,12 +40,12 @@
                 </select>
               </div>
                 <div style="margin-left:20px;">
-                    <button type="button" class="btn btn-info add-item-crv"><i class="fa fa-plus"></i>Insert Account</button>
+                    <button type="button" class="btn btn-info add-item-cpv"><i class="fa fa-plus"></i>Insert Account</button>
                 </div>
             </div>
         </div>
         <div class="table table-responsive">
-          <table class="table table-bordered" id="new-crv-table">
+          <table class="table table-bordered" id="new-cpv-table">
               <thead>
                   <tr>
                       <th width="100px" style="font-size:10px;">Account Id</th>
@@ -56,20 +56,13 @@
                   </tr>
               </thead>
               <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><a class="add-transaction-sale" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit-transaction-sale" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a><a class="" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
-                </tr>
               </tbody>
           </table>
         </div>
         </li>
           <br>
         <div class="text-center">
-          <button type="submit" class="btn btn-outline-primary">Update <small>(Cash Receiving Voucher)</small></button>
+          <button type="submit" class="btn btn-outline-primary">Submit <small>(Cash Payment Voucher)</small></button>
         </div>
         <br>
     </form>
