@@ -23,7 +23,7 @@ urlpatterns = [
 
     path('journal_voucher/new', views.journal_voucher, name='journal-voucher'),
     path('journal_voucher', views.journal_voucher_summary, name='journal-voucher-summary'),
-    path('journal_voucher/edit', views.edit_journal_voucher, name='edit-journal-voucher'),
+    path('journal_voucher/edit/<pk>', views.edit_journal_voucher, name='edit-journal-voucher'),
     path('bank_receiving_voucher', views.bank_receiving_voucher, name='bank-receiving-voucher'),
     path('bank_receiving_voucher/new', views.new_bank_receiving_voucher, name='new-bank-receiving'),
     path('bank_payment_voucher/', views.bank_payment_voucher, name='bank-payment-voucher'),

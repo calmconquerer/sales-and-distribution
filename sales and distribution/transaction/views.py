@@ -89,10 +89,12 @@ def new_purchase(request):
 @login_required()
 def edit_purchase(request, pk):
     all_item_code = Add_item.objects.all()
+    print(all_item_code)
     purchase_header = PurchaseHeader.objects.filter(id=pk).first()
     purchase_detail = PurchaseDetail.objects.filter(purchase_id=pk).all()
     all_accounts = ChartOfAccount.objects.all()
     item_code = request.POST.get('item_code_purchase', False)
+
     if item_code:
         data = Add_item.objects.filter(product_code=item_code)
         row = serializers.serialize('json', data)
@@ -877,7 +879,25 @@ def new_job_order(request):
 
 
 def edit_bank_receiving_voucher(request, pk):
+    voucher_header = VoucherHeader.objects.filter(id=pk).first()
+    voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
+    account_id = request.get('account_title', False)
+    all_accounts = ChartOfAccount.objects.all()
+    if account_id:
+        data = Transactions.objects.filter()
+        row = serializers.serialize('json', data)
+        return HttpResponse(json.dumps({'row': row}))
+    if request.method == 'POST':
+        voucher_detail.delete()
+
+
     return render(request, 'transaction/edit_bank_receiving_voucher.html')
+
+
+def edit_journal_voucher(request, pk):
+    voucher_header = VoucherHeader.objects.filter(id=pk).first()
+    voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
+    return render(request, 'transaction/edit_journal_voucher.html')
 
 
 def journal_voucher_summary(request):
@@ -891,21 +911,25 @@ def journal_voucher_summary(request):
 
 
 def edit_bank_payment_voucher(request, pk):
-
+    voucher_header = VoucherHeader.objects.filter(id=pk).first()
+    voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
     return render(request, 'transaction/edit_bank_payment_voucher.html')
 
 
 def edit_cash_receiving(request, pk):
-
+    voucher_header = VoucherHeader.objects.filter(id=pk).first()
+    voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
     return render(request, 'transaction/edit_cash_receiving_voucher.html')
 
 
 def edit_cash_payment(request, pk):
-
+    voucher_header = VoucherHeader.objects.filter(id=pk).first()
+    voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
     return render(request, 'transaction/edit_cash_payment_voucher.html')
 
 
 def edit_journal_voucher(request, pk):
-
+    voucher_header = VoucherHeader.objects.filter(id=pk).first()
+    voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
     return render(request, 'transaction/edit_journal_voucher.html')
 
