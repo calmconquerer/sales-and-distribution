@@ -1,5 +1,6 @@
 {% extends "transaction/base.html" %}
 {% load crispy_forms_tags %}
+{% load mathfilters %}
 {% block body %}
 
 <div class="card" style="width: 100%;">
@@ -7,35 +8,35 @@
   <h4>Edit Bank Receiving Voucher</h4>
 </div>
 <ul class="list-group list-group-flush">
-<form  action="" id="new-jv-form-bpv" autocomplete="off"  method="post">
+<form  action="" id="edit-jv-form-brv" autocomplete="off"  method="post">
   {% csrf_token %}
   <li class="list-group-item">
       <div class="form-row">
         <div class="form-group col-md-2">
           <label for="">Transaction ID</label>
-          <input type="text" readonly class="form-control form-control-sm" required value="{{ get_last_tran_id }}" id="tran_id">
+          <input type="text" readonly class="form-control form-control-sm" required value="{{ voucher_header.voucher_no }}" id="account_id">
         </div>
         <div class="form-group col-md-2">
           <label for="">Invoice #</label>
-          <input type="text"  class="form-control form-control-sm" required value="" id="doc_no">
+          <input type="text"  class="form-control form-control-sm" required value="{{ voucher_header.doc_no }}" id="doc_no">
         </div>
         <div class="form-group col-md-2">
           <label for="">Invoice Date</label>
-          <input type="date"  class="form-control form-control-sm" required value="" id="doc_date">
+          <input type="date"  class="form-control form-control-sm" required value="{{ voucher_header.doc_date|date:'Y-m-d' }}" id="doc_date">
         </div>
         <div class="form-group col-md-2">
           <label for="">Cheque No</label>
-          <input type="text"  class="form-control form-control-sm" required value="" id="cheque_no">
+          <input type="text"  class="form-control form-control-sm" required value="{{ voucher_header.cheque_no }}" id="cheque_no">
         </div>
         <div class="form-group col-md-2">
           <label for="">Cheque Date</label>
-          <input type="date"  class="form-control form-control-sm" required value="" id="cheque_date">
+          <input type="date"  class="form-control form-control-sm" required value="{{ voucher_header.cheque_date|date:'Y-m-d' }}" id="cheque_date">
         </div>
       </div>
       <div class="from-row">
         <div class="form-group col-md-2">
           <label for="">Description</label>
-          <textarea name="name" style="width:370px; height:30px;" id="description"></textarea>
+          <textarea name="name" style="width:370px; height:30px;" id="description">{{ voucher_header.description }}</textarea>
         </div>
       </div>
       </li>
@@ -55,7 +56,7 @@
         </div>
     </div>
     <div class="table table-responsive">
-      <table class="table table-bordered" id="new-bpv-table">
+      <table class="table table-bordered" id="edit-brv-table">
           <thead>
               <tr>
                   <th width="100px" style="font-size:10px;">Account Id</th>
@@ -66,13 +67,15 @@
               </tr>
           </thead>
           <tbody>
+            {% for value in voucher_detail %}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ value.id }}</td>
+                <td>{{ value.account_id.account_title }}</td>
+                <td>{{ value.debit }}</td>
+                <td>{{ value.credit }}</td>
+                <td><a class="add-brv-edit" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit-brv-edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a> <a class="delete-brv-edit" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>
             </tr>
+          {% endfor %}
           </tbody>
       </table>
     </div>

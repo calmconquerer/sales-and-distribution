@@ -881,17 +881,36 @@ def new_job_order(request):
 def edit_bank_receiving_voucher(request, pk):
     voucher_header = VoucherHeader.objects.filter(id=pk).first()
     voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
-    account_id = request.get('account_title', False)
+    account_id = request.POST.get('account_title', False)
     all_accounts = ChartOfAccount.objects.all()
     if account_id:
-        data = Transactions.objects.filter()
+        data = ChartOfAccount.objects.filter(id=account_id).first()
         row = serializers.serialize('json', data)
         return HttpResponse(json.dumps({'row': row}))
     if request.method == 'POST':
         voucher_detail.delete()
 
+        doc_no = request.POST.get('doc_no', False)
+        doc_date = request.POST.get('doc_date', False)
+        description = request.POST.get('description', False)
+        cheque_no = request.POST.get('cheque_no', False)
+        cheque_date = request.POST.get('cheque_date', False)
 
-    return render(request, 'transaction/edit_bank_receiving_voucher.html')
+        voucher_header.doc_no = doc_no
+        voucher_header.doc_date = doc_date
+        voucher_header.description = description
+        voucher_header.cheque_no = cheque_no
+        voucher_header.cheque_date = cheque_date
+        voucher_header.save()
+
+        items = json.loads(request.POST.get('items'))
+
+        for value in items:
+            pass
+
+    return render(request, 'transaction/edit_bank_receiving_voucher.html', {'voucher_header': voucher_header,
+                                                                            'voucher_detail': voucher_detail, 'pk': pk,
+                                                                            'all_accounts': all_accounts})
 
 
 def edit_journal_voucher(request, pk):
@@ -913,23 +932,131 @@ def journal_voucher_summary(request):
 def edit_bank_payment_voucher(request, pk):
     voucher_header = VoucherHeader.objects.filter(id=pk).first()
     voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
-    return render(request, 'transaction/edit_bank_payment_voucher.html')
+    account_id = request.POST.get('account_title', False)
+    all_accounts = ChartOfAccount.objects.all()
+    if account_id:
+        data = ChartOfAccount.objects.filter(id=account_id).first()
+        row = serializers.serialize('json', data)
+        return HttpResponse(json.dumps({'row': row}))
+    if request.method == 'POST':
+        voucher_detail.delete()
+
+        doc_no = request.POST.get('doc_no', False)
+        doc_date = request.POST.get('doc_date', False)
+        description = request.POST.get('description', False)
+        cheque_no = request.POST.get('cheque_no', False)
+        cheque_date = request.POST.get('cheque_date', False)
+
+        voucher_header.doc_no = doc_no
+        voucher_header.doc_date = doc_date
+        voucher_header.description = description
+        voucher_header.cheque_no = cheque_no
+        voucher_header.cheque_date = cheque_date
+        voucher_header.save()
+
+        items = json.loads(request.POST.get('items'))
+
+        for value in items:
+            pass
+    return render(request, 'transaction/edit_bank_payment_voucher.html', {'voucher_header': voucher_header,
+                                                                          'voucher_detail': voucher_detail,
+                                                                          'all_accounts': all_accounts, 'pk': pk,
+                                                                          'account_id': account_id})
 
 
 def edit_cash_receiving(request, pk):
     voucher_header = VoucherHeader.objects.filter(id=pk).first()
     voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
-    return render(request, 'transaction/edit_cash_receiving_voucher.html')
+    account_id = request.POST.get('account_title', False)
+    all_accounts = ChartOfAccount.objects.all()
+    if account_id:
+        data = ChartOfAccount.objects.filter(id=account_id).first()
+        row = serializers.serialize('json', data)
+        return HttpResponse(json.dumps({'row': row}))
+    if request.method == 'POST':
+        voucher_detail.delete()
+
+        doc_no = request.POST.get('doc_no', False)
+        doc_date = request.POST.get('doc_date', False)
+        description = request.POST.get('description', False)
+
+        voucher_header.doc_no = doc_no
+        voucher_header.doc_date = doc_date
+        voucher_header.description = description
+        voucher_header.save()
+
+        items = json.loads(request.POST.get('items'))
+
+        for value in items:
+            pass
+
+    return render(request, 'transaction/edit_cash_receiving_voucher.html', {'voucher_header': voucher_header,
+                                                                          'voucher_detail': voucher_detail,
+                                                                          'all_accounts': all_accounts, 'pk': pk,
+                                                                          'account_id': account_id})
 
 
 def edit_cash_payment(request, pk):
     voucher_header = VoucherHeader.objects.filter(id=pk).first()
     voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
-    return render(request, 'transaction/edit_cash_payment_voucher.html')
+    account_id = request.POST.get('account_title', False)
+    all_accounts = ChartOfAccount.objects.all()
+    if account_id:
+        data = ChartOfAccount.objects.filter(id=account_id).first()
+        row = serializers.serialize('json', data)
+        return HttpResponse(json.dumps({'row': row}))
+    if request.method == 'POST':
+        voucher_detail.delete()
+
+        doc_no = request.POST.get('doc_no', False)
+        doc_date = request.POST.get('doc_date', False)
+        description = request.POST.get('description', False)
+
+        voucher_header.doc_no = doc_no
+        voucher_header.doc_date = doc_date
+        voucher_header.description = description
+        voucher_header.save()
+
+        items = json.loads(request.POST.get('items'))
+
+        for value in items:
+            pass
+
+    return render(request, 'transaction/edit_cash_payment_voucher.html', {'voucher_header': voucher_header,
+                                                                            'voucher_detail': voucher_detail,
+                                                                            'all_accounts': all_accounts, 'pk': pk,
+                                                                            'account_id': account_id})
+
 
 
 def edit_journal_voucher(request, pk):
     voucher_header = VoucherHeader.objects.filter(id=pk).first()
     voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
-    return render(request, 'transaction/edit_journal_voucher.html')
+    account_id = request.POST.get('account_title', False)
+    all_accounts = ChartOfAccount.objects.all()
+    if account_id:
+        data = ChartOfAccount.objects.filter(id=account_id).first()
+        row = serializers.serialize('json', data)
+        return HttpResponse(json.dumps({'row': row}))
+    if request.method == 'POST':
+        voucher_detail.delete()
+
+        doc_no = request.POST.get('doc_no', False)
+        doc_date = request.POST.get('doc_date', False)
+        description = request.POST.get('description', False)
+
+        voucher_header.doc_no = doc_no
+        voucher_header.doc_date = doc_date
+        voucher_header.description = description
+        voucher_header.save()
+
+        items = json.loads(request.POST.get('items'))
+
+        for value in items:
+            pass
+
+    return render(request, 'transaction/edit_journal_voucher.html', {'voucher_header': voucher_header,
+                                                                          'voucher_detail': voucher_detail,
+                                                                          'all_accounts': all_accounts, 'pk': pk,
+                                                                          'account_id': account_id})
 

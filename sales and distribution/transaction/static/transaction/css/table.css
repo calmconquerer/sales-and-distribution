@@ -751,6 +751,63 @@ display: none;
 }
 
 /* ================================================================================= */
+#edit-brv-table.table {
+    /*table-layout: fixed*/;
+}
+#edit-brv-table.table tr th{
+    font-size: 10px;
+}
+#edit-brv-table.table tr td{
+    font-size: 10px;
+}
+#edit-brv-table.table tr th, #edit-bpv-table.table tr td {
+    border-color: #e9e9e9;
+}
+#edit-brv-table.table th i {
+    font-size: 13px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+#edit-bpv-table.table th:last-child {
+    width: 100px;
+}
+#edit-brv-table.table td a {
+cursor: pointer;
+    display: inline-block;
+    margin: 0 5px;
+min-width: 24px;
+}
+#edit-brv-table.table td a.add-brv-edit {
+    color: #27C46B;
+}
+#edit-brv-table.table td a.edit-brv-edit {
+    color: #FFC107;
+}
+#edit-brv-table.table td a.delete-brv-edit {
+    color: #E34724;
+}
+
+#edit-brv-table.table td i {
+    font-size: 16px;
+}
+#edit-brv-table.table td a.add-brv-edit i {
+    font-size: 19px;
+  margin-right: -1px;
+    position: relative;
+    top: 3px;
+}
+#edit-brv-table.table .form-control {
+    height: 32px;
+    line-height: 32px;
+    box-shadow: none;
+    border-radius: 2px;
+}
+#edit-brv-table.table .form-control.error {
+border-color: #f50000;
+}
+#edit-brv-table.table td .add-brv-edit {
+display: none;
+}
 
 #new-cpv-table.table {
     /*table-layout: fixed*/;
