@@ -912,13 +912,6 @@ def edit_bank_receiving_voucher(request, pk):
                                                                             'voucher_detail': voucher_detail, 'pk': pk,
                                                                             'all_accounts': all_accounts})
 
-
-def edit_journal_voucher(request, pk):
-    voucher_header = VoucherHeader.objects.filter(id=pk).first()
-    voucher_detail = VoucherDetail.objects.filter(header_id=pk).all()
-    return render(request, 'transaction/edit_journal_voucher.html')
-
-
 def journal_voucher_summary(request):
     cursor = connection.cursor()
     all_vouchers = cursor.execute('''select VH.id, VH.voucher_no, VH.doc_no, VH.doc_date, VH.cheque_no, VH.description, 
